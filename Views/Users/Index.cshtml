@@ -1,0 +1,87 @@
+﻿@model IEnumerable<HelpDeskIgnatov.Models.User>
+
+@{
+    ViewBag.Title = "Список пользователей";
+}
+
+<div>
+    
+    <form method="post" class="form-inline" asp-area="" asp-page="/Users/Index" asp-route-returnUrl="@Url.Action("Index", "Users", new { area = "" })">
+        <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+        <table>
+            <tr>
+                <td>
+                    <p>Отдел: </p>
+                </td>
+                <td> @Html.DropDownList("department", ViewBag.Departments as SelectList)</td>
+                <td>
+                    <p>Статус : </p>
+                </td>
+                <td> @Html.DropDownList("role", ViewBag.Roles as SelectList)</td>
+                <td><input type="submit" value="Фильтр"/> </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<h2>Список пользователей</h2>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        @if (User.IsInRole("Администратор"))
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.Login)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Password)
+            </th>
+        }
+        <th>
+            @Html.DisplayNameFor(model => model.Position)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DepartmentId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RoleId)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            @if (User.IsInRole("Администратор"))
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.Login)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Password)
+                </td>
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.Position)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Department.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Role.Name)
+            </td>
+            @if (User.IsInRole("Администратор"))
+            {
+                <td>
+                    @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Удалить", "Delete", new { id = item.Id })
+                </td>
+            }
+        </tr>
+    }
+</table>
